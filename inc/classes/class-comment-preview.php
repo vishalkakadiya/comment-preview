@@ -1,6 +1,8 @@
 <?php
 /**
  * Class to manage functions for comment preview.
+ *
+ * @package WP_Comment_Preview
  */
 
 namespace CommentPreview\Inc;
@@ -17,13 +19,13 @@ class Comment_Preview {
 	 */
 	public function __construct() {
 
-		$this->_setup_hooks();
+		$this->setup_hooks();
 	}
 
 	/**
 	 * Initialize actions and filters.
 	 */
-	protected function _setup_hooks() {
+	public function setup_hooks() {
 
 		add_filter( 'comment_form_submit_button', array( $this, 'append_preview_button' ) );
 
@@ -118,7 +120,7 @@ class Comment_Preview {
 	 * @param string $submit_button HTML to output for the submit button.
 	 * @return string Modified HTML
 	 */
-	public function append_preview_button( string $submit_button = '' ) {
+	public function append_preview_button( $submit_button ) {
 
 		$preview_button = '<input name="preview" type="button" id="preview" class="submit" value="Preview">';
 
@@ -152,19 +154,13 @@ class Comment_Preview {
 
 		$response = array();
 
-		$response['author'] = 'Anonymous';
+		$user_id = is_user_logged_in() ? get_current_user_id() : 0;
 
-		if ( ! empty( $request['author'] ) && ! isset( $request['anonymous'] ) ) {
-			$response['author'] = esc_html( $request['author'] );
-		}
-
-		$user_id = ( 'Anonymous' === $response['author'] ) ? 0 : get_current_user_id();
+		$response['author'] = $user_id;
 
 		$response['gravatar'] = get_avatar_url( $user_id, array( 'size' => 50 ) );
 
 		$response['date'] = current_time( get_option( 'date_format' ) . ' \a\t ' . get_option( 'time_format' ) );
-
-		$response['subject'] = ( isset( $request['subject'] ) ) ? esc_html( $request['subject'] ) : '';
 
 		if ( isset( $request['comment'] ) && isset( $request['format'] ) ) {
 			if ( 'text' === $request['format'] ) {

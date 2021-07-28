@@ -9,7 +9,7 @@
  * Domain Path:     /languages
  * Version:         0.1.0
  *
- * @package         Comment_Preview
+ * @package         WP_Comment_Preview
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
