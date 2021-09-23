@@ -1,6 +1,5 @@
 ( function ( data ) {
 	const previewButton = document.getElementById( 'preview' );
-	const anonymousCheckBox = document.getElementById( 'anonymous-override' );
 	const previewWrapper = document.getElementById( 'preview-wrapper' );
 	const template = document.getElementById( 'preview-template' );
 
@@ -20,9 +19,10 @@
 			format: document.querySelector( '[name="wp_comment_format"]:checked' ).value,
 		};
 
-		// Add anonymous submission data if applicable.
-		if ( anonymousCheckBox && anonymousCheckBox.checked ) {
-			commentData.anonymous = true;
+		let author = document.getElementById( 'author' );
+
+		if ( 'undefined' !== typeof author && null !== author ) {
+			commentData.author = author.value;
 		}
 
 		// Make the request.

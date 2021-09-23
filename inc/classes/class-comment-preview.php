@@ -116,9 +116,10 @@ class Comment_Preview {
 	 * Append a button to allow commenters to preview their comment.
 	 *
 	 * @param string $submit_button HTML to output for the submit button.
+	 *
 	 * @return string Modified HTML
 	 */
-	public function append_preview_button( string $submit_button = '' ) {
+	public function append_preview_button( $submit_button = '' ) {
 
 		$preview_button = '<input name="preview" type="button" id="preview" class="submit" value="Preview">';
 
@@ -152,13 +153,21 @@ class Comment_Preview {
 
 		$response = array();
 
-		$response['author'] = 'Anonymous';
-
-		if ( ! empty( $request['author'] ) && ! isset( $request['anonymous'] ) ) {
+		if ( ! empty( $request['author'] ) ) {
 			$response['author'] = esc_html( $request['author'] );
 		}
 
-		$user_id = ( 'Anonymous' === $response['author'] ) ? 0 : get_current_user_id();
+		$user_id = ( ( is_user_logged_in() ) ? get_current_user_id() : 0 );
+
+		if ( ! empty( $user_id ) ) {
+
+			$user = get_userdata( $user_id );
+
+			if ( $user ) {
+
+				$response['author'] = $user->data->display_name;
+			}
+		}
 
 		$response['gravatar'] = get_avatar_url( $user_id, array( 'size' => 50 ) );
 
