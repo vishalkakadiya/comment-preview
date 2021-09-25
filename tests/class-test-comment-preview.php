@@ -193,55 +193,55 @@ class Test_Comment_Preview extends WP_UnitTestCase {
 		$this->assertEquals( [ $this->instance, 'generate_preview' ], $endpoint['callback'] );
 	}
 
-//	/**
-//	 * @covers ::generate_preview
-//	 */
-//	public function test_generate_preview() {
-//
-//		activate_plugin( $this->jetpack_plugin );
-//
-//		update_option( 'jetpack_active_modules', array( 'markdown' ) );
-//
-//		\Jetpack::activate_module( 'markdown', false, false );
-//
-//		/**
-//		 * Test as Annoymous user.
-//		 */
-//		$request = new WP_REST_Request( 'POST', $this->rest_route );
-//
-//		$request->set_param( 'comment', '[hello](https://www.google.com)' );
-//		$request->set_param( 'format', 'markdown' );
-//
-//		$response = $this->server->dispatch( $request );
-//
-//		$this->assertEquals( 200, $response->status );
-//
-//		$this->assertEquals( '<a href="https://www.google.com">hello</a>', $response->data['comment'] );
-//
-//		/**
-//		 * Testing as login user.
-//		 */
-//		$user_id = $this->factory->user->create( [ 'role' => 'administrator' ] );
-//
-//		wp_set_current_user( $user_id );
-//
-//		$request = new WP_REST_Request( 'POST', $this->rest_route );
-//
-//		$request->set_param( 'comment', '## h2 Heading' );
-//		$request->set_param( 'format', 'markdown' );
-//
-//		$response = $this->server->dispatch( $request );
-//
-//		$this->assertEquals( 200, $response->status );
-//
-//		$this->assertEquals( $user_id, $response->data['author'] );
-//
-//		$avatar_url = get_avatar_url( $user_id, array( 'size' => 50 ) );
-//
-//		$this->assertEquals( $avatar_url, $response->data['gravatar'] );
-//
-//		$this->assertEquals( '<h2>h2 Heading</h2>', $response->data['comment'] );
-//	}
+	/**
+	 * @covers ::generate_preview
+	 */
+	public function test_generate_preview() {
+
+		activate_plugin( $this->jetpack_plugin );
+
+		update_option( 'jetpack_active_modules', array( 'markdown' ) );
+
+		\Jetpack::activate_module( 'markdown', false, false );
+
+		/**
+		 * Test as Annoymous user.
+		 */
+		$request = new WP_REST_Request( 'POST', $this->rest_route );
+
+		$request->set_param( 'comment', '[hello](https://www.google.com)' );
+		$request->set_param( 'format', 'markdown' );
+
+		$response = $this->server->dispatch( $request );
+
+		$this->assertEquals( 200, $response->status );
+
+		$this->assertEquals( '<a href="https://www.google.com">hello</a>', $response->data['comment'] );
+
+		/**
+		 * Testing as login user.
+		 */
+		$user_id = $this->factory->user->create( [ 'role' => 'administrator' ] );
+
+		wp_set_current_user( $user_id );
+
+		$request = new WP_REST_Request( 'POST', $this->rest_route );
+
+		$request->set_param( 'comment', '## h2 Heading' );
+		$request->set_param( 'format', 'markdown' );
+
+		$response = $this->server->dispatch( $request );
+
+		$this->assertEquals( 200, $response->status );
+
+		$this->assertEquals( $user_id, $response->data['author'] );
+
+		$avatar_url = get_avatar_url( $user_id, array( 'size' => 50 ) );
+
+		$this->assertEquals( $avatar_url, $response->data['gravatar'] );
+
+		$this->assertEquals( '<h2>h2 Heading</h2>', $response->data['comment'] );
+	}
 
 	public function tearDown() {
 
