@@ -1,6 +1,8 @@
 <?php
 /**
  * Class to manage functions for comment preview.
+ *
+ * @package WP_Comment_Preview
  */
 
 namespace CommentPreview\Inc;
@@ -17,13 +19,13 @@ class Comment_Preview {
 	 */
 	public function __construct() {
 
-		$this->_setup_hooks();
+		$this->setup_hooks();
 	}
 
 	/**
 	 * Initialize actions and filters.
 	 */
-	protected function _setup_hooks() {
+	public function setup_hooks() {
 
 		add_filter( 'comment_form_submit_button', array( $this, 'append_preview_button' ) );
 
@@ -68,9 +70,7 @@ class Comment_Preview {
 	 */
 	public function enqueue_scripts() {
 
-		$allowed_post_types = apply_filters( 'wp_comment_preview_post_types', array( 'post' ) );
-
-		if ( is_singular( $allowed_post_types ) ) {
+		if ( is_singular( 'post' ) ) {
 
 			wp_register_script(
 				'wp-comment-preview',
@@ -90,7 +90,6 @@ class Comment_Preview {
 			);
 
 			wp_enqueue_script( 'wp-comment-preview' );
-
 		}
 	}
 
@@ -172,8 +171,6 @@ class Comment_Preview {
 		$response['gravatar'] = get_avatar_url( $user_id, array( 'size' => 50 ) );
 
 		$response['date'] = current_time( get_option( 'date_format' ) . ' \a\t ' . get_option( 'time_format' ) );
-
-		$response['subject'] = ( isset( $request['subject'] ) ) ? esc_html( $request['subject'] ) : '';
 
 		if ( isset( $request['comment'] ) && isset( $request['format'] ) ) {
 			if ( 'text' === $request['format'] ) {
