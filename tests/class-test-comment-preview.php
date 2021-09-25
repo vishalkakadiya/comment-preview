@@ -152,31 +152,6 @@ class Test_Comment_Preview extends WP_UnitTestCase {
 		$this->go_to( get_permalink( $new_page ) );
 
 		$this->assertFalse( wp_script_is( 'wp-comment-preview' ) );
-
-//		/**
-//		 * Registering with CPT.
-//		 */
-//		register_post_type( 'video' );
-//
-//		add_filter( 'wp_comment_preview_post_types', function( $post_types ) {
-//
-//			$post_types[] = 'video';
-//
-//			return $post_types;
-//
-//		}, 11 );
-//
-//		$video_post = $this->factory->post->create(
-//			[
-//				'post_type' => 'video',
-//			]
-//		);
-//
-//		// do_action( 'wp_enqueue_scripts' );
-//
-//		$this->go_to( get_permalink( $video_post ) );
-//
-//		$this->assertTrue( wp_script_is( 'wp-comment-preview' ) );
 	}
 
 	/**
