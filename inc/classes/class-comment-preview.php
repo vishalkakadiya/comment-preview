@@ -19,50 +19,23 @@ class Comment_Preview {
 	 */
 	public function __construct() {
 
-		$this->setup_hooks();
+		$this->_setup_hooks();
 	}
 
 	/**
 	 * Initialize actions and filters.
 	 */
-	public function setup_hooks() {
-
-		add_filter( 'comment_form_submit_button', array( $this, 'append_preview_button' ) );
-
-		add_filter( 'comment_form_field_comment', array( $this, 'append_markdown_option' ), 20 );
-
-		add_filter( 'comment_form_fields', array( $this, 'comment_form_fields' ), 20 );
+	protected function _setup_hooks() {
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		add_filter( 'comment_form_fields', array( $this, 'comment_form_fields' ), 20 );
+
+		add_filter( 'comment_form_field_comment', array( $this, 'append_markdown_option' ), 20 );
+
+		add_filter( 'comment_form_submit_button', array( $this, 'append_preview_button' ), 20 );
+
 		add_action( 'rest_api_init', array( $this, 'register_rest_route' ) );
-	}
-
-	/**
-	 * Add custom markup in comment form.
-	 *
-	 * @param array $comment_fields Comment fields.
-	 *
-	 * @return mixed
-	 */
-	public function comment_form_fields( array $comment_fields = array() ) {
-
-		ob_start();
-
-		// Get template file output.
-		include WP_COMMENT_PREVIEW_PATH . 'templates/comment-preview.php';
-
-		// Save output and stop output buffering.
-		$field = ob_get_clean();
-
-		if ( ! empty( $field ) ) {
-
-			$comment_fields['comment'] = '<div id="preview-wrapper"></div>' . $comment_fields['comment'];
-
-			$comment_fields['comment'] .= $field;
-		}
-
-		return $comment_fields;
 	}
 
 	/**
@@ -94,21 +67,51 @@ class Comment_Preview {
 	}
 
 	/**
+	 * Add custom markup in comment form.
+	 *
+	 * @param array $comment_fields Comment fields.
+	 *
+	 * @return mixed
+	 */
+	public function comment_form_fields( array $comment_fields = array() ) {
+
+		ob_start();
+
+		// Get template file output.
+		include WP_COMMENT_PREVIEW_PATH . 'templates/comment-preview.php';
+
+		// Save output and stop output buffering.
+		$field = ob_get_clean();
+
+		if ( ! empty( $field ) ) {
+
+			$comment_fields['comment'] = '<div id="preview-wrapper"></div>' . $comment_fields['comment'];
+
+			$comment_fields['comment'] .= $field;
+		}
+
+		return $comment_fields;
+	}
+
+	/**
 	 * Append radio buttons to allow a commenter to format their comment in
 	 * either markdown or plain text.
 	 *
-	 * @param string $field HTML to output for the comment field.
+	 * @param string $fields HTML to output for the comment field.
+	 *
 	 * @return string Modified HTML.
 	 */
-	public function append_markdown_option( $field ) {
+	public function append_markdown_option( $fields ) {
 
-		$append_field  = '<div class="comment-form-markdown">';
-		$append_field .= '<input checked="checked" type="radio" id="format-markdown-radio" name="wp_comment_format" value="markdown">';
-		$append_field .= '<label for="format-markdown-radio">Use <a href="https://commonmark.org/help/">markdown</a>.</label> ';
-		$append_field .= '<input type="radio" id="format-text-radio" name="wp_comment_format" value="text">';
-		$append_field .= '<label for="format-text-radio">Use plain text.</label></div>';
+		ob_start();
 
-		return $field . $append_field;
+		// Get template file output.
+		include WP_COMMENT_PREVIEW_PATH . 'templates/markdown-option.php';
+
+		// Save output and stop output buffering.
+		$markdown_option_field = ob_get_clean();
+
+		return $fields . $markdown_option_field;
 	}
 
 	/**
@@ -120,7 +123,10 @@ class Comment_Preview {
 	 */
 	public function append_preview_button( $submit_button = '' ) {
 
-		$preview_button = '<input name="preview" type="button" id="preview" class="submit" value="Preview">';
+		$preview_button = sprintf(
+			'<input name="preview" type="button" id="preview" class="submit" value="%1$s">',
+			esc_html__( 'Preview', 'comment-preview' )
+		);
 
 		return $submit_button . $preview_button;
 	}
@@ -146,7 +152,7 @@ class Comment_Preview {
 	 *
 	 * @param \WP_REST_Request $request Full details about the request.
 	 *
-	 * @return \WP_REST_Response|array Response object.
+	 * @return array Response object.
 	 */
 	public function generate_preview( $request ) {
 
@@ -182,7 +188,7 @@ class Comment_Preview {
 			$comment = '';
 		}
 
-		$response['comment'] = wpautop( $comment );
+		$response['comment'] = $comment;
 
 		return $response;
 	}

@@ -24,7 +24,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	/**
 	 * @var
 	 */
-	protected $instance;
+	protected $_instance;
 
 	/**
 	 * Jetpack plugin File Path.
@@ -45,13 +45,37 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 		// Initiating the REST API.
 		global $wp_rest_server;
 
-		$this->server = $wp_rest_server = new \WP_REST_Server;
+		$wp_rest_server = new \WP_REST_Server();
+
+		$this->server = $wp_rest_server;
 
 		do_action( 'rest_api_init' );
 
-		$this->instance = new Comment_Preview();
+		$this->_instance = new Comment_Preview();
 
 		update_option( 'jetpack_active_modules', array( 'markdown' ) );
+	}
+
+	/**
+	 * Call protected/private method of a class.
+	 *
+	 * @param object &$object     Instantiated object that we will run method on.
+	 * @param string $method_name Method name to call
+	 * @param array  $parameters  Array of parameters to pass into method.
+	 *
+	 * @throws \ReflectionException
+	 *
+	 * @return mixed Method return.
+	 */
+	public function invoke_hidden_method( &$object, $method_name, array $parameters = array() ) {
+
+		$reflection = new \ReflectionClass( get_class( $object ) );
+
+		$method = $reflection->getMethod( $method_name );
+
+		$method->setAccessible( true );
+
+		return $method->invokeArgs( $object, $parameters );
 	}
 
 	/**
@@ -60,14 +84,20 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	 */
 	public function test_setup_hooks() {
 
-		$this->instance->setup_hooks();
+		$this->invoke_hidden_method( $this->_instance, '_setup_hooks' );
 
 		$hooks = array(
 			array(
-				'type'     => 'filter',
-				'name'     => 'comment_form_submit_button',
+				'type'     => 'action',
+				'name'     => 'wp_enqueue_scripts',
 				'priority' => 10,
-				'listener' => 'append_preview_button',
+				'listener' => 'enqueue_scripts',
+			),
+			array(
+				'type'     => 'filter',
+				'name'     => 'comment_form_fields',
+				'priority' => 20,
+				'listener' => 'comment_form_fields',
 			),
 			array(
 				'type'     => 'filter',
@@ -77,15 +107,9 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 			),
 			array(
 				'type'     => 'filter',
-				'name'     => 'comment_form_fields',
+				'name'     => 'comment_form_submit_button',
 				'priority' => 20,
-				'listener' => 'comment_form_fields',
-			),
-			array(
-				'type'     => 'action',
-				'name'     => 'wp_enqueue_scripts',
-				'priority' => 10,
-				'listener' => 'enqueue_scripts',
+				'listener' => 'append_preview_button',
 			),
 			array(
 				'type'     => 'action',
@@ -99,10 +123,46 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 
 			$this->assertEquals(
 				$hook['priority'],
-				call_user_func( sprintf( 'has_%s', $hook['type'] ), $hook['name'], array( $this->instance, $hook['listener'] ) ),
+				call_user_func( sprintf( 'has_%s', $hook['type'] ), $hook['name'], array( $this->_instance, $hook['listener'] ) ),
 				sprintf( '\Deadline\Inc\Rest_Api::_setup_hooks() failed to register %1$s "%2$s" to %3$s()', $hook['type'], $hook['name'], $hook['listener'] )
 			);
 		}
+	}
+
+	/**
+	 * @covers ::enqueue_scripts
+	 */
+	public function test_enqueue_scripts_with_page_type() {
+
+		$new_page = $this->factory->post->create(
+			array(
+				'post_type' => 'page',
+			)
+		);
+
+		$this->go_to( get_permalink( $new_page ) );
+
+		do_action( 'wp_enqueue_scripts' );
+
+		$this->assertFalse( wp_script_is( 'wp-comment-preview' ) );
+	}
+
+	/**
+	 * @covers ::enqueue_scripts
+	 */
+	public function test_enqueue_scripts() {
+
+		$new_post = $this->factory->post->create(
+			array(
+				'post_type' => 'post',
+			)
+		);
+
+		$this->go_to( get_permalink( $new_post ) );
+
+		do_action( 'wp_enqueue_scripts' );
+
+		$this->assertTrue( wp_script_is( 'wp-comment-preview' ) );
 	}
 
 	/**
@@ -114,66 +174,54 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 			'comment' => '',
 		);
 
-		// Get template file output.
-		$templates_path = dirname( __FILE__ ) . '/templates/comment-preview.php';
-
-		$output_fields = $this->instance->comment_form_fields( $comment_fields );
+		$output_fields = apply_filters( 'comment_form_fields', $comment_fields );
 
 		ob_start();
 
-		include $templates_path;
+		include dirname( __FILE__ ) . '/templates/comment-preview.php';
 
 		// Save output and stop output buffering.
 		$comment_preview_field = ob_get_clean();
 
-		$comment_fields['comment'] = '<div id="preview-wrapper"></div>' . $comment_fields['comment'];
+		$this->assertContains( '<div id="preview-wrapper"></div>', $output_fields['comment'] );
 
-		$comment_fields['comment'] .= $comment_preview_field;
-
-		$this->assertEquals( $output_fields, $comment_fields );
-	}
-
-	public function set_cpt( $post_types = array() ) {
-
-		$post_types[] = 'video';
-
-		return $post_types;
+		$this->assertContains( $comment_preview_field, $output_fields['comment'] );
 	}
 
 	/**
-	 * @covers ::enqueue_scripts
+	 * @covers ::append_markdown_option
 	 */
-	public function test_enqueue_scripts_with_cpt() {
+	public function test_append_markdown_option() {
 
-		$new_page = $this->factory->post->create(
-			[
-				'post_type' => 'page',
-			]
-		);
+		$field = '<input type="text" name="test" />';
 
-		do_action( 'wp_enqueue_scripts' );
+		$output_fields = apply_filters( 'comment_form_field_comment', $field );
 
-		$this->go_to( get_permalink( $new_page ) );
+		ob_start();
 
-		$this->assertFalse( wp_script_is( 'wp-comment-preview' ) );
+		include dirname( __FILE__ ) . '/templates/markdown-option.php';
+
+		// Save output and stop output buffering.
+		$comment_preview_field = ob_get_clean();
+
+		$this->assertContains( $comment_preview_field, $output_fields );
 	}
 
 	/**
-	 * @covers ::enqueue_scripts
+	 * @covers ::append_preview_button
 	 */
-	public function test_enqueue_scripts() {
+	public function test_append_preview_button() {
 
-		$new_post = $this->factory->post->create(
-			[
-				'post_type' => 'post',
-			]
+		$button = '<input type="submit" name="comment_submit" />';
+
+		$output_buttons = apply_filters( 'comment_form_submit_button', $button );
+
+		$preview_button = sprintf(
+			'<input name="preview" type="button" id="preview" class="submit" value="%1$s">',
+			esc_html__( 'Preview', 'comment-preview' )
 		);
 
-		$this->go_to( get_permalink( $new_post ) );
-
-		do_action( 'wp_enqueue_scripts' );
-
-		$this->assertTrue( wp_script_is( 'wp-comment-preview' ) );
+		$this->assertContains( $preview_button, $output_buttons );
 	}
 
 	/**
@@ -181,7 +229,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	 */
 	public function test_register_rest_route() {
 
-		$this->instance->setup_hooks();
+		$this->invoke_hidden_method( $this->_instance, '_setup_hooks' );
 
 		do_action( 'rest_api_init' );
 
@@ -194,7 +242,8 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 		$endpoint = $routes[ $custom_route ][0];
 
 		$this->assertTrue( is_callable( $endpoint['callback'] ) );
-		$this->assertEquals( [ $this->instance, 'generate_preview' ], $endpoint['callback'] );
+
+		$this->assertEquals( array( $this->_instance, 'generate_preview' ), $endpoint['callback'] );
 	}
 
 	/**
@@ -275,7 +324,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 		/**
 		 * Testing as login user.
 		 */
-		$user = $this->factory->user->create_and_get( [ 'role' => 'editor' ] );
+		$user = $this->factory->user->create_and_get( array( 'role' => 'editor' ) );
 
 		wp_set_current_user( $user->ID );
 

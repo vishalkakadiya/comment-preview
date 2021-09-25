@@ -1,8 +1,6 @@
 <?php
 /**
  * Template for Previewing Comment.
- *
- * @package WP_Comment_Preview
  */
 
 ?>
