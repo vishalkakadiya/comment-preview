@@ -5,15 +5,19 @@
  * @package Plugin_Sample
  */
 
+namespace CommentPreview\Tests;
+
+use CommentPreview\Inc\Comment_Preview;
+
 /**
  * Sample test case.
  */
-class Test_Comment_Preview extends WP_UnitTestCase {
+class Test_Comment_Preview extends \WP_UnitTestCase {
 
 	/**
 	 * Holds the WP REST Server object
 	 *
-	 * @var WP_REST_Server
+	 * @var \WP_REST_Server
 	 */
 	private $server;
 
@@ -41,11 +45,11 @@ class Test_Comment_Preview extends WP_UnitTestCase {
 		// Initiating the REST API.
 		global $wp_rest_server;
 
-		$this->server = $wp_rest_server = new WP_REST_Server;
+		$this->server = $wp_rest_server = new \WP_REST_Server;
 
 		do_action( 'rest_api_init' );
 
-		$this->instance = new \CommentPreview\Inc\Comment_Preview();
+		$this->instance = new Comment_Preview();
 
 		update_option( 'jetpack_active_modules', array( 'markdown' ) );
 	}
@@ -196,36 +200,86 @@ class Test_Comment_Preview extends WP_UnitTestCase {
 	/**
 	 * @covers ::generate_preview
 	 */
-	public function test_generate_preview() {
-
-		activate_plugin( $this->jetpack_plugin );
-
-		update_option( 'jetpack_active_modules', array( 'markdown' ) );
-
-		\Jetpack::activate_module( 'markdown', false, false );
+	public function test_generate_preview_plain_text() {
 
 		/**
-		 * Test as Annoymous user.
+		 * Test as guest user.
 		 */
-		$request = new WP_REST_Request( 'POST', $this->rest_route );
+		$request = new \WP_REST_Request( 'POST', $this->rest_route );
 
-		$request->set_param( 'comment', '[hello](https://www.google.com)' );
+		$comment_data = 'This is the plain text';
+
+		$request->set_param( 'comment', $comment_data );
+		$request->set_param( 'format', 'plain' );
+		$request->set_param( 'author', 'Vishal Kakadiya' );
+
+		$response = $this->server->dispatch( $request );
+
+		$this->assertEquals( 200, $response->status );
+
+		$this->assertEquals( $comment_data, wp_unslash( $response->data['comment'] ) );
+
+		// Check guest author name.
+		$this->assertEquals( 'Vishal Kakadiya', $response->data['author'] );
+
+		/**
+		 * Test as guest user with markdown text but without Jetpack's markdown module enabled.
+		 */
+		$comment_data = '## This is the Markdown';
+
+		$request->set_param( 'comment', $comment_data );
 		$request->set_param( 'format', 'markdown' );
 
 		$response = $this->server->dispatch( $request );
 
 		$this->assertEquals( 200, $response->status );
 
-		$this->assertEquals( '<a href="https://www.google.com">hello</a>', $response->data['comment'] );
+		$this->assertEquals( $comment_data, wp_unslash( $response->data['comment'] ) );
+	}
+
+	/**
+	 * @covers ::generate_preview
+	 */
+	public function test_generate_preview_markdown() {
+
+		/**
+		 * Enabling jetpack plugin and markdown module.
+		 */
+		activate_plugin( $this->jetpack_plugin );
+
+		\Jetpack::activate_module( 'markdown', false, false );
+
+		update_option( 'wpcom_publish_comments_with_markdown', 1, 'yes' );
+
+		include_once WP_PLUGIN_DIR . '/jetpack/modules/markdown/easy-markdown.php';
+
+		\WPCom_Markdown::get_instance()->load();
+
+		/**
+		 * Testing as guest user with markdown module enabled.
+		 */
+		$request = new \WP_REST_Request( 'POST', $this->rest_route );
+
+		$request->set_param( 'comment', '[hello](https://www.google.com)' );
+		$request->set_param( 'format', 'markdown' );
+		$request->set_param( 'author', 'Vikram Bajaj' );
+
+		$response = $this->server->dispatch( $request );
+
+		$this->assertEquals( 200, $response->status );
+
+		$this->assertEquals( '<a href="https://www.google.com" rel="nofollow ugc">hello</a>', wp_unslash( $response->data['comment'] ) );
+
+		$this->assertEquals( 'Vikram Bajaj', $response->data['author'] );
 
 		/**
 		 * Testing as login user.
 		 */
-		$user_id = $this->factory->user->create( [ 'role' => 'administrator' ] );
+		$user = $this->factory->user->create_and_get( [ 'role' => 'editor' ] );
 
-		wp_set_current_user( $user_id );
+		wp_set_current_user( $user->ID );
 
-		$request = new WP_REST_Request( 'POST', $this->rest_route );
+		$request = new \WP_REST_Request( 'POST', $this->rest_route );
 
 		$request->set_param( 'comment', '## h2 Heading' );
 		$request->set_param( 'format', 'markdown' );
@@ -234,15 +288,20 @@ class Test_Comment_Preview extends WP_UnitTestCase {
 
 		$this->assertEquals( 200, $response->status );
 
-		$this->assertEquals( $user_id, $response->data['author'] );
+		$this->assertEquals( $user->data->display_name, $response->data['author'] );
 
-		$avatar_url = get_avatar_url( $user_id, array( 'size' => 50 ) );
+		$avatar_url = get_avatar_url( $user->ID, array( 'size' => 50 ) );
 
 		$this->assertEquals( $avatar_url, $response->data['gravatar'] );
 
-		$this->assertEquals( '<h2>h2 Heading</h2>', $response->data['comment'] );
+		delete_option( 'wpcom_publish_comments_with_markdown' );
+
+		\Jetpack::deactivate_module( 'markdown' );
 	}
 
+	/**
+	 * Clean up.
+	 */
 	public function tearDown() {
 
 		parent::tearDown();
