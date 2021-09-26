@@ -16,14 +16,14 @@ echo "Running with the following versions:"
 echo "php -v"
 php -v
 echo "./vendor/bin/phpunit --version"
-./vendor/bin/phpunit --version
+./bin/phpunit --version
 
 # Run PHPUnit tests
 if [[ ! -z "$WP_VERSION" ]] ; then
-  ./vendor/bin/phpunit --coverage-clover=clover.xml || exit 1;
+  ./bin/phpunit --coverage-clover=clover.xml || exit 1;
 fi
 
 # Run phpcs
 if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-    ./vendor/bin/phpcs
+    ./bin/phpcs
 fi
