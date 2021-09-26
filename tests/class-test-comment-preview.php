@@ -79,8 +79,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::_setup_hooks
-	 * @covers ::__construct
+	 * Covering __construct() and setup_hooks() functions.
 	 */
 	public function test_setup_hooks() {
 
@@ -130,7 +129,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::enqueue_scripts
+	 * Covering enqueue_scripts() when script is not loading.
 	 */
 	public function test_enqueue_scripts_with_page_type() {
 
@@ -148,7 +147,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::enqueue_scripts
+	 * Covering enqueue_scripts() when script is loading.
 	 */
 	public function test_enqueue_scripts() {
 
@@ -166,7 +165,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::comment_form_fields
+	 * Covering comment_form_fields().
 	 */
 	public function test_comment_form_fields() {
 
@@ -189,7 +188,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::append_markdown_option
+	 * Covering append_markdown_option().
 	 */
 	public function test_append_markdown_option() {
 
@@ -208,7 +207,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::append_preview_button
+	 * Covering append_preview_button().
 	 */
 	public function test_append_preview_button() {
 
@@ -225,7 +224,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::register_rest_route
+	 * Covering register_rest_route().
 	 */
 	public function test_register_rest_route() {
 
@@ -247,7 +246,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::generate_preview
+	 * Covering REST API Response with plain text generate_preview().
 	 */
 	public function test_generate_preview_plain_text() {
 
@@ -259,7 +258,7 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 		$comment_data = 'This is the plain text';
 
 		$request->set_param( 'comment', $comment_data );
-		$request->set_param( 'format', 'plain' );
+		$request->set_param( 'format', 'text' );
 		$request->set_param( 'author', 'Vishal Kakadiya' );
 
 		$response = $this->server->dispatch( $request );
@@ -284,10 +283,24 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 		$this->assertEquals( 200, $response->status );
 
 		$this->assertEquals( $comment_data, wp_unslash( $response->data['comment'] ) );
+
+		/**
+		 * Test as guest user with empty commit.
+		 */
+		$request = new \WP_REST_Request( 'POST', $this->rest_route );
+
+		$request->set_param( 'comment', '' );
+		$request->set_param( 'format', 'text' );
+
+		$response = $this->server->dispatch( $request );
+
+		$this->assertEquals( 200, $response->status );
+
+		$this->assertEquals( '', $response->data['comment'] );
 	}
 
 	/**
-	 * @covers ::generate_preview
+	 * Covering REST API Response with markdown text generate_preview().
 	 */
 	public function test_generate_preview_markdown() {
 
