@@ -178,7 +178,7 @@ class Comment_Preview {
 
 		$response['date'] = current_time( get_option( 'date_format' ) . ' \a\t ' . get_option( 'time_format' ) );
 
-		if ( isset( $request['comment'] ) && isset( $request['format'] ) ) {
+		if ( ! empty( $request['comment'] ) && isset( $request['format'] ) ) {
 			if ( 'text' === $request['format'] ) {
 				$comment = wp_kses_data( $request['comment'] );
 			} else {

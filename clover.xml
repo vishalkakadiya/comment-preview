@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1632650448">
+  <project timestamp="1632650448">
+    <package name="CommentPreview\Inc">
+      <file name="/app/inc/classes/class-comment-preview.php">
+        <class name="Comment_Preview" namespace="CommentPreview\Inc" fullPackage="CommentPreview" package="CommentPreview">
+          <metrics complexity="17" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="57" coveredstatements="57" elements="65" coveredelements="65"/>
+        </class>
+        <line num="20" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="9"/>
+        <line num="22" type="stmt" count="9"/>
+        <line num="28" type="method" name="_setup_hooks" visibility="protected" complexity="1" crap="1" count="9"/>
+        <line num="30" type="stmt" count="9"/>
+        <line num="32" type="stmt" count="9"/>
+        <line num="34" type="stmt" count="9"/>
+        <line num="36" type="stmt" count="9"/>
+        <line num="38" type="stmt" count="9"/>
+        <line num="44" type="method" name="enqueue_scripts" visibility="public" complexity="2" crap="2" count="2"/>
+        <line num="46" type="stmt" count="2"/>
+        <line num="48" type="stmt" count="1"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="50" type="stmt" count="1"/>
+        <line num="51" type="stmt" count="1"/>
+        <line num="52" type="stmt" count="1"/>
+        <line num="53" type="stmt" count="1"/>
+        <line num="56" type="stmt" count="1"/>
+        <line num="57" type="stmt" count="1"/>
+        <line num="58" type="stmt" count="1"/>
+        <line num="60" type="stmt" count="1"/>
+        <line num="61" type="stmt" count="1"/>
+        <line num="65" type="stmt" count="1"/>
+        <line num="76" type="method" name="comment_form_fields" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="78" type="stmt" count="1"/>
+        <line num="81" type="stmt" count="1"/>
+        <line num="84" type="stmt" count="1"/>
+        <line num="86" type="stmt" count="1"/>
+        <line num="88" type="stmt" count="1"/>
+        <line num="90" type="stmt" count="1"/>
+        <line num="93" type="stmt" count="1"/>
+        <line num="104" type="method" name="append_markdown_option" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="106" type="stmt" count="1"/>
+        <line num="109" type="stmt" count="1"/>
+        <line num="112" type="stmt" count="1"/>
+        <line num="114" type="stmt" count="1"/>
+        <line num="124" type="method" name="append_preview_button" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="126" type="stmt" count="1"/>
+        <line num="127" type="stmt" count="1"/>
+        <line num="128" type="stmt" count="1"/>
+        <line num="131" type="stmt" count="1"/>
+        <line num="137" type="method" name="register_rest_route" visibility="public" complexity="1" crap="1" count="9"/>
+        <line num="139" type="stmt" count="9"/>
+        <line num="140" type="stmt" count="9"/>
+        <line num="141" type="stmt" count="9"/>
+        <line num="143" type="stmt" count="9"/>
+        <line num="144" type="stmt" count="9"/>
+        <line num="145" type="stmt" count="9"/>
+        <line num="157" type="method" name="generate_preview" visibility="public" complexity="8" crap="8" count="2"/>
+        <line num="159" type="stmt" count="2"/>
+        <line num="161" type="stmt" count="2"/>
+        <line num="162" type="stmt" count="2"/>
+        <line num="165" type="stmt" count="2"/>
+        <line num="167" type="stmt" count="2"/>
+        <line num="169" type="stmt" count="1"/>
+        <line num="171" type="stmt" count="1"/>
+        <line num="173" type="stmt" count="1"/>
+        <line num="177" type="stmt" count="2"/>
+        <line num="179" type="stmt" count="2"/>
+        <line num="181" type="stmt" count="2"/>
+        <line num="182" type="stmt" count="2"/>
+        <line num="183" type="stmt" count="1"/>
+        <line num="185" type="stmt" count="2"/>
+        <line num="188" type="stmt" count="1"/>
+        <line num="191" type="stmt" count="2"/>
+        <line num="193" type="stmt" count="2"/>
+        <metrics loc="196" ncloc="137" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="57" coveredstatements="57" elements="65" coveredelements="65"/>
+      </file>
+    </package>
+    <metrics files="1" loc="196" ncloc="137" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="57" coveredstatements="57" elements="65" coveredelements="65"/>
+  </project>
+</coverage>
