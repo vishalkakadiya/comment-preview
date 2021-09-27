@@ -31,13 +31,15 @@ if [ -z "$DB_PHPUNIT_DPS" ] || [ -z `docker ps -q --no-trunc | grep $DB_PHPUNIT_
 fi
 
 # Install WordPress Tests.
-docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit ./bin/install-wp-tests.sh wordpress_tests root "" mysql_phpunit
+docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml up -d
+docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit ./bin/install-wp-tests.sh wordpress_tests root "" mysql_phpunit latest true
 
 # Run WP Tests
 if [ $COVERAGE_REPORT = 1 ]; then
   print_message "💬 Running PHPUnit Tests With Generating Coverage report..."
-  docker-compose -f docker-compose.phpunit.yml -f docker-compose.xdebug.yml run --rm wordpress_phpunit \
-		phpunit -c ./bin/phpunit.xml --coverage-clover=/var/www/app/clover.xml --coverage-html=/var/www/app/tests/coverage/html --debug --verbose $@
+  docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit  phpdbg -qrr /usr/local/bin/phpunit -c /app/phpunit.xml --coverage-clover=/app/clover.xml --coverage-html=/app/coverage
+#  docker-compose -f docker-compose.phpunit.yml -f docker-compose.xdebug.yml run --rm wordpress_phpunit \
+#		phpunit -c ./bin/phpunit.xml --coverage-clover=/var/www/app/clover.xml --coverage-html=/var/www/app/tests/coverage/html --debug --verbose $@
 
 	print_message "💬 Coverage report is generated inside tests/coverage/ dir..."
 else
