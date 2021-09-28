@@ -27,8 +27,6 @@ matrix:
       env: WP_VERSION=trunk
     - php: 7.2
       env: WP_VERSION=trunk
-    - php: 7.2
-      env: WP_TRAVISCI=phpcs
 
 script: ./bin/run-wp-unit-tests.sh
 
