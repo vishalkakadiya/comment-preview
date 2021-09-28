@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1632650448">
-  <project timestamp="1632650448">
+<coverage generated="1632852429">
+  <project timestamp="1632852429">
     <package name="CommentPreview\Inc">
-      <file name="/app/inc/classes/class-comment-preview.php">
-        <class name="Comment_Preview" namespace="CommentPreview\Inc" fullPackage="CommentPreview" package="CommentPreview">
+      <file name="/var/www/app/inc/classes/class-comment-preview.php">
+        <class name="CommentPreview\Inc\Comment_Preview" namespace="CommentPreview\Inc" fullPackage="CommentPreview" package="CommentPreview">
           <metrics complexity="17" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="57" coveredstatements="57" elements="65" coveredelements="65"/>
         </class>
         <line num="20" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="9"/>
