@@ -26,4 +26,3 @@ before_script:
 
 script:
   - phpunit
-  - WP_MULTISITE=1 phpunit
