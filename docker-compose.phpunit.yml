@@ -2,16 +2,26 @@ version: "3"
 
 services:
   wordpress_phpunit:
-    image: "rahulprajapati/phpunit:latest"
+    image: "rahulprajapati/phpunit:7.5.17"
+    environment:
+      TESTDIRONE: '/var/www/app'
     volumes:
-      - ".:/app"
-      - "testsuite:/tmp"
+      - "./:/var/www/app"
+      - "./.docker/config/phpunit/xdebug-disable.ini:/etc/php7/conf.d/xdebug.ini:ro"
+      - wp_core_dir:/tmp/wordpress:rw
+      - wp_test_dir:/tmp/wordpress-tests-lib:rw
+    networks:
+      - "phpunit"
   mysql_phpunit:
     image: "mariadb:10.2"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: "wordpress_test"
       MYSQL_ROOT_PASSWORD: ""
+    networks:
+      - "phpunit"
 
+networks:
+  phpunit:
 volumes:
-  testsuite: {}
+  wp_core_dir:
+  wp_test_dir:

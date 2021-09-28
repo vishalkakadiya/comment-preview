@@ -1,4 +1,5 @@
 sudo: false
+dist: trusty
 
 language: php
 
@@ -9,24 +10,27 @@ notifications:
 
 branches:
   only:
-    - main
+    - master
+    - develop
 
-php:
-  - 5.6
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
 
 matrix:
   include:
-    - php: 5.6
+    - php: 7.3
       env: WP_VERSION=latest
+    - php: 7.2
+      env: WP_VERSION=latest
+    - php: 7.3
+      env: WP_VERSION=trunk
+    - php: 7.2
+      env: WP_VERSION=trunk
+    - php: 7.2
+      env: WP_TRAVISCI=phpcs
 
-before_script:
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - composer global require "phpunit/phpunit=4.8.*|5.7.*"
-  - docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit  phpdbg -qrr /usr/local/bin/phpunit -c /app/phpunit.xml --coverage-clover=/app/clover.xml --coverage-html=/app/coverage
+script: ./bin/run-wp-unit-tests.sh
 
-script:
-  - phpunit --coverage-text --coverage-clover=coverage.cloverphpunit
-
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+after_script: ./bin/after-run-wp-unit-tests.sh
