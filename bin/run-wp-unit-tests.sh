@@ -15,7 +15,7 @@ fi
 echo "Running with the following versions:"
 echo "php -v"
 php -v
-echo "./vendor/bin/phpunit --version"
+echo "./bin/phpunit --version"
 ./bin/phpunit --version
 
 # Run PHPUnit tests
