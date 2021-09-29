@@ -9,16 +9,16 @@ This plugin will show real comment preview to the users, it's also supporting je
 #### Steps to configure this plugin in your site:
 
 - Activate jetpack's markdown module.
-- ![Activate Jetpack's markdown module](https://github.com/vishalkakadiya/comment-preview/tree/main/screenshots/enable-jetpack-markdown.png)
+- ![Activate Jetpack's markdown module](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/enable-jetpack-markdown.png)
 
 - Activate jetpack markdown for comments settings.
-- ![Activate jetpack markdown for comments settings](https://github.com/vishalkakadiya/comment-preview/tree/main/screenshots/enable-markdown-for-comments.png)
+- ![Activate jetpack markdown for comments settings](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/enable-markdown-for-comments.png)
 
 - Activate comment preview plugin now.
-- ![Activate comment preview plugin](https://github.com/vishalkakadiya/comment-preview/tree/main/screenshots/enable-comment-preview-plugin.png)
+- ![Activate comment preview plugin](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/enable-comment-preview-plugin.png)
 
 - Comment's form and preview of comment.
-- ![Comment's form and preview of comment](https://github.com/vishalkakadiya/comment-preview/tree/main/screenshots/working-comment-preview.png)
+- ![Comment's form and preview of comment](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/working-comment-preview.png)
 
 #### Support for Custom Post Type?
 
