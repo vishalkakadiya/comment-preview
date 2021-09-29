@@ -40,7 +40,7 @@ Yes, this plugin is giving support for custom post types, for that you can use b
 ## Available Endpoint
 
 **Get single post ( POST request )**
-- `http://example.com/wp-json/wp_comment_preview/v1/preview`
+- `https://example.com/wp-json/wp_comment_preview/v1/preview`
   - Params:
     - `comment` - Comment text.
     - `format` - Whether to preview markdown or plain text - Two values it will take `plain` OR `markdown`.
