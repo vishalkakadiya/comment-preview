@@ -8,23 +8,27 @@ This plugin will show real comment preview to the users, it's also supporting je
 
 -------------------
 
-#### Steps to configure this plugin in your site:
+## Steps to configure this plugin in your site:
 
-- Activate jetpack's markdown module.
+#### Activate jetpack's markdown module.
+
 ![Activate Jetpack's markdown module](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/enable-jetpack-markdown.png)
 
-- Activate jetpack markdown for comments settings.
+#### Activate jetpack markdown for comments settings.
+
 ![Activate jetpack markdown for comments settings](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/enable-markdown-for-comments.png)
 
-- Activate comment preview plugin now.
+#### Activate comment preview plugin now.
+
 ![Activate comment preview plugin](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/enable-comment-preview-plugin.png)
 
-- Comment's form and preview of comment.
+#### Comment's form and preview of comment.
+
 ![Comment's form and preview of comment](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/working-comment-preview.png)
 
 -------------------
 
-#### Support for Custom Post Type?
+## Support for Custom Post Type?
 
 Yes, this plugin is giving support for custom post types, for that you can use below filter.
 - `wp_comment_preview_allowed_post_types`: Returning array of post types will support those post types.
@@ -33,7 +37,7 @@ Yes, this plugin is giving support for custom post types, for that you can use b
 
 **NOTE:** This plugin works with WordPress's default comment form only.
 
-#### Available Endpoint
+## Available Endpoint
 
 **Get single post ( POST request )**
 - http://example.com/wp-json/wp_comment_preview/v1/preview
