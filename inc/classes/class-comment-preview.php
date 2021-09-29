@@ -171,7 +171,7 @@ class Comment_Preview {
 
 		$user_id = ( ( is_user_logged_in() ) ? get_current_user_id() : 0 );
 
-		if ( ! empty( $user_id ) ) {
+		if ( ! empty( $user_id ) && empty( $response['author'] ) ) {
 
 			$user = get_userdata( $user_id );
 
