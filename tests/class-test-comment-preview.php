@@ -165,6 +165,39 @@ class Test_Comment_Preview extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Covering enqueue_scripts() when script is loading for custom CPT.
+	 */
+	public function test_enqueue_scripts_for_cpt() {
+
+		register_post_type(
+			'video',
+			array(
+				'public'       => true,
+				'show_in_rest' => true,
+			)
+		);
+
+		add_filter( 'wp_comment_preview_allowed_post_types', function( $post_types ) {
+
+			$post_types[] = 'video';
+
+			return $post_types;
+		} );
+
+		$video_post = $this->factory->post->create(
+			array(
+				'post_type' => 'video',
+			)
+		);
+
+		$this->go_to( get_permalink( $video_post ) );
+
+		do_action( 'wp_enqueue_scripts' );
+
+		$this->assertTrue( wp_script_is( 'wp-comment-preview' ) );
+	}
+
+	/**
 	 * Covering comment_form_fields().
 	 */
 	public function test_comment_form_fields() {

@@ -43,7 +43,14 @@ class Comment_Preview {
 	 */
 	public function enqueue_scripts() {
 
-		if ( is_singular( 'post' ) ) {
+		/**
+		 * Filter to enable comment preview on custom post types.
+		 *
+		 * @param array List of post types.
+		 */
+		$post_types = apply_filters( 'wp_comment_preview_allowed_post_types', array( 'post' ) );
+
+		if ( is_singular( $post_types ) ) {
 
 			wp_register_script(
 				'wp-comment-preview',
