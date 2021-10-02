@@ -12,19 +12,19 @@ This plugin will show real comment preview to the users, it's also supporting je
 
 #### Activate jetpack's markdown module.
 
-![Activate Jetpack's markdown module](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/enable-jetpack-markdown.png)
+![Activate Jetpack's markdown module](https://user-images.githubusercontent.com/9035925/135707056-5ebb79ff-5685-413c-97a6-5ba6723504c3.png)
 
 #### Activate jetpack markdown for comments settings.
 
-![Activate jetpack markdown for comments settings](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/enable-markdown-for-comments.png)
+![Activate jetpack markdown for comments settings](https://user-images.githubusercontent.com/9035925/135707070-3f94d8fd-f844-4edd-82f5-bcf7bee6422e.png)
 
 #### Activate comment preview plugin now.
 
-![Activate comment preview plugin](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/enable-comment-preview-plugin.png)
+![Activate comment preview plugin](https://user-images.githubusercontent.com/9035925/135707095-8c25ecde-bad2-413e-8ee1-2e90ebc3fb45.png)
 
 #### Comment's form and preview of comment.
 
-![Comment's form and preview of comment](https://github.com/vishalkakadiya/comment-preview/blob/main/screenshots/working-comment-preview.png)
+![Comment's form and preview of comment](https://user-images.githubusercontent.com/9035925/135707115-4135a227-c256-433d-94d0-4ee621494557.png)
 
 -------------------
 
