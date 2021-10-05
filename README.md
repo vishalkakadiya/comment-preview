@@ -4,9 +4,9 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vishalkakadiya/comment-preview/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/vishalkakadiya/comment-preview/?branch=main)
 [![Code Coverage](https://scrutinizer-ci.com/g/vishalkakadiya/comment-preview/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/vishalkakadiya/comment-preview/?branch=main)
 
-**PHPCS Standard used:** WordPress-Extra
-
 This plugin will show real comment preview to the users, it's also supporting jetpack's markdown.
+
+**PHPCS Standard used:** WordPress-Extra
 
 -------------------
 
