@@ -1,2 +1,4 @@
 # Unit test coverage
 coverage
+
+/vendor/
