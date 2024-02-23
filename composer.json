@@ -1,10 +1,8 @@
 {
     "name": "vishalkakadiya/comment-preview",
     "type": "wordpress-plugin",
-    "authors": [
-        {
-            "name": "vishalkakadiya",
-            "email": "vishalkakadiya123@gmail.com"
-        }
-    ]
+    "description": "A short description of the plugin",
+    "require": {
+        "php": ">=7.0"
+    }
 }
