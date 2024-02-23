@@ -1,10 +1,10 @@
 {
-    "name": "vishalmadhavjibhaikakadiya/comment-preview",
-    "type": "library",
+    "name": "vishalkakadiya/comment-preview",
+    "type": "wordpress-plugin",
     "authors": [
         {
             "name": "vishalkakadiya",
-            "email": "vishal.kakadiya@rtcamp.com"
+            "email": "vishalkakadiya123@gmail.com"
         }
     ]
 }
